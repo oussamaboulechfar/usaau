@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+</div>
+<div class="site-for-sale-banner">
+    <p>This website is for sale! 📞 Contact: <a href="mailto:yourmail@example.com">oboulechfar1@gmail.com</a></p>
+</div>
+<section class="city-detail-section">
+
+    <div class="city-detail-hero" style="background-image: url('{{ city.image.url }}');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>{{ city.name }}</h1>
+            <p class="subtitle">{{ city.description|truncatewords:30 }}</p>
+        </div>
+    </div>
+
+    <div class="city-detail-container">
+        <div class="city-detail-content">
+
+            <div class="city-detail-description">
+                <h2>on {{ city.name }}</h2>
+                <p>{{ city.description }}</p>
+            </div>
+
+
+            <!-- معرض الصور -->
+            <div class="city-gallery" data-gsap="fade-up">
+                <h2>Photo gallery {{ city.name }}</h2>
+                <div class="gallery-grid">
+                    {% for image in images %}
+                    <div class="gallery-item">
+                        <img src="{{ image.image.url }}" alt="{{ city.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="city-detail-actions">
+                <a href="{% url 'home' %}" class="action-button secondary">back</a>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<a href="#" class="back-to-top">↑</a>
+{% endblock %}

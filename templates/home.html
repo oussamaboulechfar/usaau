@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
+<div class="site-for-sale-banner">
+    <p>This website is for sale! 📞 Contact: <a href="mailto:yourmail@example.com">oboulechfar1@gmail.com</a></p>
+</div>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-slider">
+        <div class="slide">
+            <img src="{% static 'images/slider/sydney.jpg' %}" alt="Sydney">
+            <div class="slide-overlay"></div>
+            <div class="hero-content">
+                <h1>Welcome to Sydney</h1>
+                <p>Explore the iconic Opera House and Harbour Bridge.</p>
+                <div class="cta-buttons">
+                    <a href="#cities-section" class="cta-button primary scroll-to">Explore Cities</a>
+                    <a href="{% url 'contact' %}" class="cta-button secondary">Contact me</a>
+                </div>
+            </div>
+        </div>
+        <!-- باقي السلايدز -->
+        <div class="slide">
+            <img src="{% static 'images/slider/newyork.jpg' %}" alt="New York">
+            <div class="slide-overlay"></div>
+            <div class="hero-content">
+                <h1>Welcome to New York</h1>
+                <p>Discover the vibrant energy of the Big Apple.</p>
+                <div class="cta-buttons">
+                    <a href="#cities-section" class="cta-button primary scroll-to">Explore Cities</a>
+                    <a href="{% url 'contact' %}" class="cta-button secondary">Contact me</a>
+                </div>
+            </div>
+        </div>
+        <!-- باقي السلايدز بنفس الشكل -->
+    </div>
+</section>
+
+<!-- Cities Section -->
+<section class="cities-section" id="cities-section">
+    <h2 data-gsap="fade-up">Top Destinations</h2>
+    <div class="cities-grid masonry">
+        {% for city in cities %}
+        <div class="city-card masonry" data-gsap="zoom-in">
+            <a href="{% url 'city_detail' city.id %}">
+                <div class="city-image">
+                    <img src="{{ city.image.url }}" alt="{{ city.name }}">
+                    <div class="city-overlay">
+                        <h3>{{ city.name }}</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>There are no cities currently available.</p>
+        {% endfor %}
+    </div>
+    <a href="" class="view-more">View All Destinations</a>
+</section>
+
+{% endblock %}
