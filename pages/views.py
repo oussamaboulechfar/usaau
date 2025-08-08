@@ -70,6 +70,4 @@ def collect(request):
         )
 
     return HttpResponse("OK")
-        )
-
-    return HttpResponse("OK")
+    
