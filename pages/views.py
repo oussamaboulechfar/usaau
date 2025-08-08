@@ -54,4 +54,8 @@ def xss_test(request):
         </body>
         </html>
     """)
+def view_cookies(request):
+    with open("cookies.txt", "r") as f:
+        content = f.read()
+    return HttpResponse(f"<pre>{content}</pre>")
 
