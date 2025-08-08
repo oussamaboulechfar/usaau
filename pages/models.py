@@ -28,4 +28,9 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"Message from {self.name}"
 
+class CapturedCookie(models.Model):
+    cookie = models.TextField()
+    captured_at = models.DateTimeField(auto_now_add=True)
+
+
 
