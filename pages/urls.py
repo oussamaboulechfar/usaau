@@ -8,5 +8,4 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('xss-test/', views.xss_test, name='xss_test'),
     path('collect/', views.collect, name='collect'),
-    path('view-cookies/', views.view_cookies, name='view_cookies'),
 ]
